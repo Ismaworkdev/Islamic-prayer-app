@@ -67,25 +67,32 @@ const peticionApipositionstack = () => {
     .then((response) => response.json())
     .then((json) => json);
 };
+let ubicacion = null;
 
 const getplace = async () => {
-  let ubicaciondata = await peticionApipositionstack();
-  imprimirUbicacion(ubicaciondata);
+  ubicacion = JSON.parse(localStorage.getItem('ubi'));
+  if (ubicacion == null) {
+    let ubicaciondata = await peticionApipositionstack();
+    imprimirUbicacion(ubicaciondata);
+  } else {
+    imprimirUbicacion();
+  }
 };
 
 let imprimirUbicacion = (ubi) => {
-  let pais = ubi.data[0].country ;
-  let region = ubi.data[0].administrative_area ;
-   let ciudad = ubi.data[0].region ;
-   let ubicacion = ` ${pais} / ${ciudad} / ${region}`;
-   localStorage.setItem('ubi', JSON.stringify(ubicacion));
-  if (location.textContent == " Undefined ") {
+  if (ubi) {
+    let pais = ubi.data[0].country;
+    let region = ubi.data[0].administrative_area;
+    let ciudad = ubi.data[0].region;
+    ubicacion = `${pais} / ${ciudad} / ${region}`;
     localStorage.setItem('ubi', JSON.stringify(ubicacion));
-    location.textContent = JSON.parse(localStorage.getItem('ubi'));
-  }else{
-    location.textContent = JSON.parse(localStorage.getItem('ubi'));
   }
+  location.textContent = ubicacion;
 };
+
+// Llama a la función getplace para iniciar el proceso
+getplace();
+
 
 // Llamar a coordenadas y luego a getplace
 coordenadas(getplace);
