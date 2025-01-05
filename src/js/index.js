@@ -1,14 +1,14 @@
 let date = document.getElementById("date");
 let islamicdate = document.getElementById("islamicdate");
 let location = document.getElementById("location");
-let nextpray = document.getElementById("nextpray");
 
-
+import { rezo } from "./rezos.js";
+let rezosdeldia =[];
 let diag = null;
 let mesg = null;
 let añog = null;
 
-function updateDate() {
+function Gregoriano() {
   let dateactual = new Date();
   let dia = dateactual.getDate();
   let mes = dateactual.getMonth() + 1; 
@@ -19,8 +19,8 @@ function updateDate() {
   añog = año;
 }
 // Actualizar cada 10 minutos
-updateDate();
-setInterval(updateDate, 600000);
+Gregoriano();
+setInterval(Gregoriano, 600000);
 
 const peticionApihijricalendario = () =>{
     return fetch (`http://api.aladhan.com/v1/gToH/${diag}-${mesg}-${añog}`)
@@ -45,7 +45,7 @@ islamicdate.textContent = ` ${dia} / ${mes} / ${año}`
 
 
 
-let Apykey = "52921db3bff7be8d0af7a1e4ef64c7cd";
+let Apykey = "f2cfd0317072441bfd71c2f9e0ff119b";
 let lat = null;
 let lon = null;
 
@@ -77,9 +77,56 @@ let imprimirUbicacion = (ubi) => {
   let pais = ubi.data[0].country ;
   let region = ubi.data[0].administrative_area ;
    let ciudad = ubi.data[0].region ;
-
-  location.textContent = ` ${pais} / ${ciudad} / ${region}`;
+   let ubicacion = ` ${pais} / ${ciudad} / ${region}`;
+   localStorage.setItem('ubi', JSON.stringify(ubicacion));
+  if (location.textContent == " Undefined ") {
+    localStorage.setItem('ubi', JSON.stringify(ubicacion));
+    location.textContent = JSON.parse(localStorage.getItem('ubi'));
+  }else{
+    location.textContent = JSON.parse(localStorage.getItem('ubi'));
+  }
 };
 
 // Llamar a coordenadas y luego a getplace
 coordenadas(getplace);
+
+
+
+
+
+
+
+//rezos
+const peticionApirezos = () =>{
+  
+  return fetch(`http://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`)  
+  .then((response) => response.json())
+  .then((json) => json);
+
+}
+
+const getrezos = async () => {
+  let rezosdata = await peticionApirezos();
+ 
+  rezosdehoy(rezosdata.data.timings); 
+};
+let rezosdehoy = (data)=>{
+
+  rezosdeldia.push( 
+    new rezo("FAJR", data.Fajr),
+   new rezo("AMANECER", data.Sunrise),
+   new rezo("DUHR", data.Dhuhr), 
+   new rezo("ASR", data.Asr), 
+   new rezo("MAGRIB", data.Maghrib), 
+   new rezo("ISHA", data.Isha) ); 
+  
+
+   localStorage.setItem('rezosdeldia', JSON.stringify(rezosdeldia));
+
+}
+coordenadas(getrezos);
+
+
+
+
+
