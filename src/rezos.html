@@ -1,31 +1,97 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prayer App </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prayer App</title>
+  <link href="./css/output.css" rel="stylesheet">
+  <link href="./css/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-green-100">
-    <header class="bg-green-600 text-black p-7">
-        <ul class="container mx-auto flex justify-between w-[1200px]">
-          <li>  <a href="./index.html" class=" p-4 rounded-lg 0 hover:bg-white  hover:border-dashed hover:border-green-500 hover:shadow-lg hover:transform hover:scale-105 transition duration-300 ease-in-out">  <i class="fa-solid fa-house"></i></a>  </li>
-          <li>  <a href="./mesislamico.html" class=" p-4 rounded-lg 0 hover:bg-white  hover:border-dashed hover:border-green-500 hover:shadow-lg hover:transform hover:scale-105 transition duration-300 ease-in-out">  <i class="fa-solid fa-list"></i></a>  </li>
-            <li>  <a href="./rezos.html" class=" p-4 rounded-lg 0 hover:bg-white  hover:border-dashed hover:border-green-500 hover:shadow-lg hover:transform hover:scale-105 transition duration-300 ease-in-out">  <i class="fa-solid fa-clock"></i></a>  </li>
-          
-                  </ul>
-    </header>
+<body >
+    <div class="grid grid-template-areas: [header] [main] [footer]; ">
+        <!-- Header -->
+        <header class="bg-green-600 text-black p-7 flex justify-around w-[70px] align-middle">
+          <div class="w-28">
+            <img src="./img/logo.png" alt="">
+          </div>
+            <ul class="flex items-center w-[500px] justify-between ">
+                <li class=" flex align-middle">
+                    <a href="./index.html" class=" block p-4 rounded-lg hover:bg-white hover:border-dashed hover:border-green-500 hover:shadow-lg hover:transform hover:scale-105 transition duration-300 ease-in-out">
+                        <i class="fa-solid fa-house fa-2x"></i>
+                       
+                    </a>
+                </li>
+                <li class="align-middle">
+                    <a href="./rezos.html" class="p-4 rounded-lg hover:bg-white hover:border-dashed hover:border-green-500 hover:shadow-lg hover:transform hover:scale-105 transition duration-300 ease-in-out">
+                        <i class="fa-solid fa-clock fa-2x"></i>
+                    
+                    </a>
+                </li>
+            </ul>
+        </header>
+    
 
-  <main class="bg-green-500 text-black p-7 rounded-lg shadow-lg max-w-4xl mx-auto mt-10">
-    <h1 class="text-3xl font-bold mb-6">Rezos de hoy </h1>
-    <div class="w-full flex flex-wrap p-4 mx-auto justify-between" id="containerrezos">
+    <!-- Main -->
+    <main class="h-full bg-green-100  pb-32">
+      <div class="bg-green-500 text-black p-7 rounded-lg shadow-lg max-w-4xl mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6">Rezos de hoy</h1>
+        <div class="w-full flex flex-wrap p-4 mx-auto justify-between" id="containerrezos">
       
 
       
+        </div>
       </div>
-      
-</main>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 ">
+        <div class="container mx-auto text-center">
+            <p class="text-lg font-semibold">Esta app ofrece:</p>
+            <div class=" flex  gap-4 align-middle justify-around">
+                <ul class="mt-2 justify-start text-left list-inside list-disc">
+                    <li class="pt-5">Los rezos diarios actualizados según tu ubicación.</li>
+                    <li class="pt-5">El rezo que toque en cada momento del día de manera actualizada.</li>
+                    <li class="pt-5">La ubicación actual de manera actualizada.</li>
+                    <li class="pt-5">Los días y el mes islámico actual.</li>
+                </ul>
+                
+                
+<div class="block">
+    <p class="text-lg font-semibold">Siguenos</p>
+    <ul class="flex justify-center space-x-4 mt-10">
+        <li>
+            <a href="https://www.youtube.com" class="text-red-600 hover:text-red-800 transition duration-300">
+                <i class="fab fa-youtube fa-2x"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://www.instagram.com" class="text-pink-600 hover:text-pink-800 transition duration-300">
+                <i class="fab fa-instagram fa-2x"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://www.facebook.com" class="text-blue-600 hover:text-blue-800 transition duration-300">
+                <i class="fab fa-facebook fa-2x"></i>
+            </a>
+        </li>
+        <li>
+            <a href="https://www.twitter.com" class="text-blue-400 hover:text-blue-600 transition duration-300">
+                <i class="fab fa-twitter fa-2x"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+            </div>
+            <p class="mt-4">&copy; 2025 Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    
+  </div>
+
+  <script type="module" src="./js/rezoss.js"></script>
 </body>
-<script type="module" src="./js/rezoss.js"></script>
 </html>
+

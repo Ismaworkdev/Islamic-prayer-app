@@ -1,7 +1,7 @@
 let date = document.getElementById("date");
 let islamicdate = document.getElementById("islamicdate");
 let location = document.getElementById("location");
-
+let nextpray = document.getElementById("nextpray")
 import { rezo } from "./rezos.js";
 let rezosdeldia =[];
 let diag = null;
@@ -133,7 +133,35 @@ let rezosdehoy = (data)=>{
 }
 coordenadas(getrezos);
 
+let siguienterezo = () => {
+  let rezoshoy = JSON.parse(localStorage.getItem('rezosdeldia'));
+  let horaActual = horaactual();
+
+  for (let i = 0; i < rezoshoy.length; i++) {
+    if (horaActual < rezoshoy[i]._hora) {
+      return rezoshoy[i];
+    }
+  }
+
+  // Si la hora actual es después del último rezo del día, devolver el primer rezo del día siguiente
+  return rezoshoy[0];
+};
+
+let horaactual = () => {
+  let date = new Date();
+  let horas = date.getHours();
+  let minutos = date.getMinutes();
+  let horaFormateada = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
+  return horaFormateada;
+};
+
+// Ejemplo de uso
+console.log(siguienterezo());
 
 
-
-
+let imprimirrezo = ()=>{
+  let rezo = siguienterezo();
+  nextpray.textContent = `${rezo._nombre} a las ${rezo._hora}`; 
+}
+imprimirrezo();
+setInterval(imprimirrezo, 60000);

@@ -5,6 +5,7 @@ let rezosdeldia = JSON.parse(localStorage.getItem('rezosdeldia'));
 console.log(rezosdeldia);
 
 let imprimirezos = ()=>{
+    containerrezos.innerHTML = "";
     let fragment = document.createDocumentFragment();
     rezosdeldia.forEach(element => {
     let div = document.createElement("DIV");
@@ -17,5 +18,5 @@ let imprimirezos = ()=>{
 });
 containerrezos.appendChild(fragment); 
 }
-
-setInterval(imprimirezos(), 60);
+imprimirezos(); 
+setInterval(imprimirezos, 6000);
