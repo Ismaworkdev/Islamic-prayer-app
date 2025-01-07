@@ -2,7 +2,13 @@ let date = document.getElementById("date");
 let islamicdate = document.getElementById("islamicdate");
 let location = document.getElementById("location");
 let nextpray = document.getElementById("nextpray")
+let containerrezos = document.getElementById("containerrezos");
 import { rezo } from "./rezos.js";
+
+let Apykey = "f2cfd0317072441bfd71c2f9e0ff119b";
+ let lat = null;
+ let lon = null;
+
 let rezosdeldia =[];
 let diag = null;
 let mesg = null;
@@ -45,15 +51,11 @@ islamicdate.textContent = ` ${dia} / ${mes} / ${año}`
 
 
 
-let Apykey = "f2cfd0317072441bfd71c2f9e0ff119b";
-let lat = null;
-let lon = null;
-
 let coordenadas = (callback) => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       lat = position.coords.latitude;
-      lon = position.coords.longitude;
+       lon = position.coords.longitude;
       console.log(`latitud : ${lat} , longuitud : ${lon}`); 
       callback();
     });
@@ -165,3 +167,28 @@ let imprimirrezo = ()=>{
 }
 imprimirrezo();
 setInterval(imprimirrezo, 60000);
+
+
+
+
+
+let rezosdeldialocalsotaje = JSON.parse(localStorage.getItem('rezosdeldia'));
+
+
+
+let imprimirezos = ()=>{
+    containerrezos.innerHTML = "";
+    let fragment = document.createDocumentFragment();
+    rezosdeldialocalsotaje.forEach(element => {
+    let div = document.createElement("DIV");
+    div.setAttribute("class" , "bg-white p-10 rounded-lg shadow-md mb-4 m-4 w-64 h-32");
+    let h2 = document.createElement("H2");
+    h2.setAttribute("class" , "text-xl font-semibold");
+    h2.textContent = `${element._nombre} : ${element._hora}`
+    div.appendChild(h2);
+    fragment.appendChild(div);
+});
+containerrezos.appendChild(fragment); 
+}
+imprimirezos(); 
+setInterval(imprimirezos, 6000);
