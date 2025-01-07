@@ -1,76 +1,81 @@
-let date = document.getElementById("date");
+let dates = document.getElementById("date");
 let islamicdate = document.getElementById("islamicdate");
 let location = document.getElementById("location");
 let nextpray = document.getElementById("nextpray")
 let containerrezos = document.getElementById("containerrezos");
 import { rezo } from "./rezos.js";
-
+//la api de la ubicacion . 
 let Apykey = "f2cfd0317072441bfd71c2f9e0ff119b";
- let lat = null;
- let lon = null;
-
+ export let lat = null;
+ export let lon = null;
+//los rezos del dia con sus respectivo horas 
 let rezosdeldia =[];
-let diag = null;
-let mesg = null;
-let añog = null;
-
-function Gregoriano() {
+export let diag = null;
+export let mesg = null;
+export let añog = null;
+//fecha gregoriana 
+export let  Gregoriano = ()=> {
   let dateactual = new Date();
-  let dia = dateactual.getDate();
+   let dia = dateactual.getDate();
   let mes = dateactual.getMonth() + 1; 
   let año = dateactual.getFullYear();
-  date.innerHTML = ` ${dia} / ${mes} / ${año}`;
+  let cadena = ` ${dia} / ${mes} / ${año}`;
   diag = dia;
   mesg = mes;
   añog = año;
+  return cadena;
 }
-// Actualizar cada 10 minutos
-Gregoriano();
-setInterval(Gregoriano, 600000);
 
-const peticionApihijricalendario = () =>{
+
+
+
+//peticion al la fecha islamica dondole el dia el mes y el año gregoriano 
+ export const peticionApihijricalendario = () =>{
     return fetch (`http://api.aladhan.com/v1/gToH/${diag}-${mesg}-${añog}`)
     .then((response) => response.json())
     .then((json) => json);
 };
 
-const getfechahijri = async ()=>{
-let fechahijri = await peticionApihijricalendario();
-imprimirfechahijri(fechahijri);
+export const getfechahijri = async () => {
+  let fechahijri = await peticionApihijricalendario();
+  return fechahijri;
 };
-getfechahijri();
-
-let imprimirfechahijri = (fechahijri) => {
-let año = fechahijri.data.hijri.year; 
-let dia = fechahijri.data.hijri.day; 
-let mes = fechahijri.data.hijri.month.number ; 
-islamicdate.textContent = ` ${dia} / ${mes} / ${año}`
-}
-
-
+// imprimir el dia el mes y el año islamico 
+let imprimirfechahijri = async () => {
+  let fechahijri = await getfechahijri();
+  let año = fechahijri.data.hijri.year; 
+  let dia = fechahijri.data.hijri.day; 
+  let mes = fechahijri.data.hijri.month.number; 
+  islamicdate.textContent = `${dia} / ${mes} / ${año}`;
+};
 
 
 
-let coordenadas = (callback) => {
+
+
+
+//coordenadas api nativa 
+export let coordenadas = (callback) => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
       lat = position.coords.latitude;
        lon = position.coords.longitude;
       console.log(`latitud : ${lat} , longuitud : ${lon}`); 
       callback();
+      
     });
   } else {
     console.log("No se permitió.");
   }
 };
-
+//api privada que de nombres de los sitios (regiones , paises y areas administrativas ) diarios que nesecita la alt y lon actual y la apykey 
 const peticionApipositionstack = () => {
   return fetch(`http://api.positionstack.com/v1/reverse?access_key=${Apykey}&query=${lat},${lon}`)
     .then((response) => response.json())
     .then((json) => json);
 };
 let ubicacion = null;
-
+//imprimir ubicacion a la primera y despues de carga des el localsotorage para no ahcer todo el rato peticiones a la api . 
 const getplace = async () => {
   ubicacion = JSON.parse(localStorage.getItem('ubi'));
   if (ubicacion == null) {
@@ -80,6 +85,7 @@ const getplace = async () => {
     imprimirUbicacion();
   }
 };
+//imprimir ubicacion . 
 
 let imprimirUbicacion = (ubi) => {
   if (ubi) {
@@ -92,12 +98,6 @@ let imprimirUbicacion = (ubi) => {
   location.textContent = ubicacion;
 };
 
-// Llama a la función getplace para iniciar el proceso
-getplace();
-
-
-// Llamar a coordenadas y luego a getplace
-coordenadas(getplace);
 
 
 
@@ -105,7 +105,8 @@ coordenadas(getplace);
 
 
 
-//rezos
+
+// rezos diarios seguen el lugar en donde se este para ello se da la lat y lon 
 const peticionApirezos = () =>{
   
   return fetch(`http://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lon}&method=4`)  
@@ -119,6 +120,7 @@ const getrezos = async () => {
  
   rezosdehoy(rezosdata.data.timings); 
 };
+//añadir los rezos al array y meterlos en el localstorage. 
 let rezosdehoy = (data)=>{
 
   rezosdeldia.push( 
@@ -133,8 +135,8 @@ let rezosdehoy = (data)=>{
    localStorage.setItem('rezosdeldia', JSON.stringify(rezosdeldia));
 
 }
-coordenadas(getrezos);
 
+//calcualr el sigueinte rezo dependiendo d ela hora actual . 
 let siguienterezo = () => {
   let rezoshoy = JSON.parse(localStorage.getItem('rezosdeldia'));
   let horaActual = horaactual();
@@ -145,7 +147,7 @@ let siguienterezo = () => {
     }
   }
 
-  // Si la hora actual es después del último rezo del día, devolver el primer rezo del día siguiente
+  // si el ultimo rezo ya fue devulvera el primer rezo del dia siguiente . 
   return rezoshoy[0];
 };
 
@@ -157,25 +159,18 @@ let horaactual = () => {
   return horaFormateada;
 };
 
-// Ejemplo de uso
-console.log(siguienterezo());
 
 
 let imprimirrezo = ()=>{
   let rezo = siguienterezo();
   nextpray.textContent = `${rezo._nombre} a las ${rezo._hora}`; 
 }
-imprimirrezo();
-setInterval(imprimirrezo, 60000);
-
-
-
 
 
 let rezosdeldialocalsotaje = JSON.parse(localStorage.getItem('rezosdeldia'));
 
 
-
+//los rezos del dia actual siempre son 6 
 let imprimirezos = ()=>{
     containerrezos.innerHTML = "";
     let fragment = document.createDocumentFragment();
@@ -190,5 +185,23 @@ let imprimirezos = ()=>{
 });
 containerrezos.appendChild(fragment); 
 }
+let imprimirfechagregoriana = ()=>{
+  setInterval(Gregoriano, 600000);
+  dates.textContent = Gregoriano(); 
+}
+
+document.addEventListener("DOMContentLoaded" , function (params) {
+  imprimirfechagregoriana(); 
+  getfechahijri();
+  // Llama a la función getplace para iniciar el proceso
+getplace();
+// Llamar a coordenadas y luego a getplace
+coordenadas(getplace);
+coordenadas(getrezos);
+setInterval(imprimirrezo, 60000);
+imprimirfechahijri();
+imprimirrezo();
 imprimirezos(); 
 setInterval(imprimirezos, 6000);
+
+});
