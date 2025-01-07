@@ -5,7 +5,7 @@ let nextpray = document.getElementById("nextpray")
 let containerrezos = document.getElementById("containerrezos");
 import { rezo } from "./rezos.js";
 //la api de la ubicacion . 
-let Apykey = "f2cfd0317072441bfd71c2f9e0ff119b";
+let Apykey = "5dc35062d614a1ff488ffe51947b9fc8";
  export let lat = null;
  export let lon = null;
 //los rezos del dia con sus respectivo horas 
