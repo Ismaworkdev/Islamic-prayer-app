@@ -11,6 +11,7 @@ import { diag
        coordenadas ,
        getfechahijri
        , peticionApihijricalendario
+       ,horaactual
      } from "./index.js";
 
     // Coordenadas de la Qibla (Meca)
@@ -91,6 +92,18 @@ for (let i = 1; i < diasdelmesactual; i++) {
 lastday.appendChild(fragment);
 
 }
+//actualizar cada dia el calendario . 
+let actualizarcalendari = ()=>{
+    setInterval(() => { 
+        let hora = horaactual();
+        if (hora > '00:00' && hora < '00:03') {
+            imprimirdias(); 
+            console.log("imprimido")
+        }
+       
+    }, 60000);
+}
+
 
 
 document.addEventListener("DOMContentLoaded" ,function () {
@@ -104,8 +117,6 @@ document.addEventListener("DOMContentLoaded" ,function () {
     peticionApihijricalendario();
     datafechahijri();
     imprimirdias();
-    setInterval(() => { 
-        imprimirdias(); 
-    }, 86400000); 
-    //cada 24horas para cabiar de dias . 
+ 
+    actualizarcalendari();
 })

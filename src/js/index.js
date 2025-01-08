@@ -151,12 +151,12 @@ let siguienterezo = () => {
   return rezoshoy[0];
 };
 
-let horaactual = () => {
-  let date = new Date();
-  let horas = date.getHours();
-  let minutos = date.getMinutes();
-  let horaFormateada = `${horas.toString().padStart(2, '0')}:${minutos.toString().padStart(2, '0')}`;
-  return horaFormateada;
+export let horaactual = () => {
+  let dateactual = new Date();
+  let h = dateactual.getHours();
+  let m = dateactual.getMinutes();
+  let tiempoactual = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+  return tiempoactual ;
 };
 
 
